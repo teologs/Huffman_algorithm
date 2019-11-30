@@ -1,7 +1,3 @@
-//
-// Created by Teodor Iliev on 2019-11-15.
-//
-
 #include "Table.h"
 
 Table::Table() {
@@ -64,11 +60,100 @@ int Table::getNumberBySymbol(char a) const {
     return 0;
 }
 
-/*int Table::getNumberBySymbol(char a) const {
-    for(int i=0; i< 256; i++)
+void Table::fillTableFromString(string input) {
+    if(input.length() == 0)
+        cout << "No input!" << endl;
+
+    for(int i=0; i<input.length(); i++)
     {
-        if(array[i].second == a)
-            return array[i].first;
+        if (!checkIfSaved(input[i]))
+        {
+            array[numberOfSavedSymbols].second = input[i];
+            array[numberOfSavedSymbols].first++;
+            numberOfSavedSymbols++;
+        }
+        else{
+            addOneCount(input[i]);
+        }
     }
-    return 0;
-} */
+}
+
+int Table::getNumberOfSavedSymbols() const {
+    return numberOfSavedSymbols;
+}
+
+void Table::printTable(int n) {
+    for(int i=0;i<n;i++)
+    {
+        cout << "index " << i << "'s symbol is " << array[i].second << endl;
+        cout << "index " << i << "'s counter is " << array[i].first << endl;
+    }
+}
+
+void Table::setBinaryElement(string& binary, char symbol, int index) {
+    binaryArray[index].first = binary;
+    binaryArray[index].second = symbol;
+}
+
+void Table::printBinaryTable(int n) {
+    for(int i=0;i<n;i++)
+    {
+        cout << "index " << i << "'s symbol is " << binaryArray[i].second << endl;
+        cout << "index " << i << "'s binary code is " << binaryArray[i].first << endl;
+    }
+}
+
+void Table::setBinaryElementBySymbol(string &binary, char symbol) {
+    for(int i=0;i<numberOfSavedSymbols;i++)
+    {
+        if(binaryArray[i].second==symbol)
+            binaryArray[i].first = binary;
+    }
+}
+
+void Table::copySymbolsIntoBinaryArray() {
+    for(int i=0;i<numberOfSavedSymbols;i++)
+    {
+        binaryArray[i].second = array[i].second;
+    }
+}
+
+string Table::getBinaryNumberBySymbol(char symbol) {
+    for(int i=0;i<numberOfSavedSymbols;i++)
+    {
+        if(binaryArray[i].second == symbol)
+            return binaryArray[i].first;
+    }
+}
+
+string Table::getBinaryNumberByIndex(int index) {
+    return binaryArray[index].first;
+}
+
+char Table::getBinarySymbolByIndex(int index) {
+    return binaryArray[index].second;
+}
+
+void Table::setNumberByIndex(int index, string number) {
+    int temp=0;
+    for(char& c : number)
+    {
+        temp = temp*10 + ((int)c - 48);
+    }
+    array[index].first = temp;
+}
+
+void Table::setSymbolByIndex(int index, char symbol) {
+    array[index].second = symbol;
+}
+
+void Table::addNumberAndSymbol(string number, char symbol) {
+    array[numberOfSavedSymbols].second = symbol;
+    int temp=0;
+    for(char& c : number)
+    {
+        temp = temp*10 + ((int)c - 48);
+    }
+    array[numberOfSavedSymbols].first = temp;
+    numberOfSavedSymbols++;
+}
